@@ -20,12 +20,14 @@ from rest_framework import routers
 from empresa import views
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
+#router.register(r'users', views.UserViewSet)
+#router.register(r'groups', views.GroupViewSet)
+#router.register(r'viagens', views.viagens_list)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include(router.urls)),
-    url(r'^apiauth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^empresa$', views.viagens_list)
+    #url(r'^apiauth/', include('rest_framework.urls', namespace='rest_framework'))
 
 ]
