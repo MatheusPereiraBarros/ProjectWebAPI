@@ -27,7 +27,8 @@ router = routers.DefaultRouter()
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include(router.urls)),
-    url(r'^empresa$', views.viagens_list)
+    url(r'^empresa$', views.viagens_list),
+    url(r'^empresa$/(?P<pk>[0-9]+)/$', views.viagens_detail),
     #url(r'^apiauth/', include('rest_framework.urls', namespace='rest_framework'))
 
 ]
