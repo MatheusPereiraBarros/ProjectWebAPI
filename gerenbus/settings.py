@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
     'rest_framework',
     'empresa'
 ]
@@ -84,8 +85,15 @@ DATABASES = {
 }
 
 REST_FRAMEWORK ={
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+               'rest_framework.authentication.BasicAuthentication',  # enables simple command line authentication
+               'rest_framework.authentication.SessionAuthentication',
+               'rest_framework.authentication.TokenAuthentication',
+           ),
+
         'DEFAULT_PERMISSION_CLASSES':[
-            'rest_framework.permissions.IsAdminUser',
+       #     'rest_framework.permissions.IsAdminUser',
+            'rest_framework.permissions.IsAuthenticated',
             ],
         'PAGE_SIZE': 10
 }
