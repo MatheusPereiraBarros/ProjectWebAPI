@@ -20,24 +20,26 @@ from rest_framework import routers
 from empresa import views
 from django.conf.urls.static import static
 from .views import *
+from rest_framework_swagger.views import get_swagger_view
 
+schema_view = get_swagger_view(title='GerenBus')
 
-router = routers.DefaultRouter()
-#router.register(r'users', views.UserViewSet)
-#router.register(r'groups', views.GroupViewSet)
-#router.register(r'viagens', views.viagens_list)
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
-    url(r'^viagens$', views.viagens_list),
-    url(r'^viagem$/(?P<pk>[0-9]+)/$', views.viagens_detail),
-    url(r'^funcionarios$', views.funcionarios_list),
-    url(r'^funcoes$', views.funcoes_list),
-    url(r'^rotas$', views.rotas_list),
-    url(r'^onibus$', views.onibus_list),
-    url(r'^users/$', UserList.as_view(), name=UserList.name),
-    url(r'^garagens$', views.garagens_list),
- ]
-    #url(r'^apiauth/', include('rest_framework.urls', namespace='rest_framework'))
-
+  url(r'^$', APIRoot.as_view(), name='root'),
+  url(r'^users/$', UserList.as_view(), name=UserList.name),
+  url(r'^viagens/$', viagens_list.as_view(), name=viagens_list.name),
+  url(r'^viagem/(?P<pk>[0-9]+)/$', viagens_detail.as_view(), name=viagens_detail.name),
+  url(r'^funcionarios/$', funcionarios_list.as_view(), name=funcionarios_list.name),
+  url(r'^funcionario/(?P<pk>[0-9]+)/$', funcionarios_detail.as_view(), name=funcionarios_detail.name),
+  url(r'^funcoes/$', funcoes_list.as_view(), name=funcoes_list.name),
+  url(r'^funcao/(?P<pk>[0-9]+)/$', funcoes_detail.as_view(), name=funcoes_detail.name),
+  url(r'^rotas/$', rotas_list.as_view(), name=rotas_list.name),
+  url(r'^rota/(?P<pk>[0-9]+)/$', rotas_detail.as_view(), name=rotas_detail.name),
+  url(r'^onibus_list/$', onibus_list.as_view(), name=onibus_list.name),
+  url(r'^onibus_detail/(?P<pk>[0-9]+)/$', onibus_detail.as_view(), name=onibus_detail.name),
+  url(r'^garagens/$', garagens_list.as_view(), name=garagens_list.name),
+  url(r'^garagem/(?P<pk>[0-9]+)/$', garagens_detail.as_view(), name=garagens_detail.name),
+  url(r'^swagger/$', schema_view, name='swagger'),
+]
 

@@ -11,131 +11,138 @@ from rest_framework import viewsets
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
 from .models import *
 from .serializers import *
 
-'''from .serializers import UserSerializer, GroupSerializer
+class viagens_detail(generics.RetrieveUpdateDestroyAPIView):
 
-class UserViewSet(viewsets.ModelViewSet):
-	queryset = User.objects.all().order_by('-date_joined')
-	serializer_class = UserSerializer
+  queryset = Viagem.objects.all()
+  serializer_class = ViagemSerializer
+  name = 'viagem-detail'
+  permission_classes = (permissions.IsAuthenticated,)
 
-class GroupViewSet(viewsets.ModelViewSet):
-	queryset = Group.objects.all()
-	serializer_class = GroupSerializer
-'''
+class onibus_detail(generics.RetrieveUpdateDestroyAPIView):
+ 
+  queryset = Onibus.objects.all()
+  serializer_class = OnibusSerializer
+  name = 'onibus-detail'
+  permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-@api_view(['GET', 'POST'])
-def viagens_list(request):
-	if request.method == 'GET':
-		viagens = Viagem.objects.all()
-		viagens_serializer = ViagemSerializer(viagens, many=True)
-		return Response(viagens_serializer.data)
+class garagens_detail(generics.RetrieveUpdateDestroyAPIView):
+  
+  queryset = Garagem.objects.all()
+  serializer_class = GaragemSerializer
+  name = 'garagem-detail'
+  permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-	elif request.method == 'POST':
-		viagens_serializer = ViagemSerializer(data=request.data)
-		if viagens_serializer.is_valid():
-			viagens_serializer.save()
-			return Response(viagens_serializer.data, status=status.HTTP_201_CREATED)
-			return Response(viagens_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class funcoes_detail(generics.RetrieveUpdateDestroyAPIView):
+ 
+  queryset = Funcao.objects.all()
+  serializer_class = FuncaoSerializer
+  name = 'funcao-list'
+  permission_classes = (permissions.IsAuthenticated,)
 
-@api_view(['GET', 'PUT', 'POST', 'DELETE'])
-def viagens_detail(request, pk):
-	try:
-		viagem = Viagem.objects.get(pk=pk)
-	except Viagem.DoesNotExist:
-		return Response(status=status.HTTP_404_NOT_FOUND)
+class rotas_detail(generics.RetrieveUpdateDestroyAPIView):
+  
+  queryset = Rota.objects.all()
+  serializer_class = RotaSerializer
+  name = 'rota-detail'
+  permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-	if request.method == 'GET':
-		viagens_serializer = ViagemSerializer(viagem)
-		return Response(viagens_serializer.data) 
-	elif request.method == 'PUT':
-		viagens_serializer = ViagemSerializer(viagem, data=request.data)
-		if viagens_serializer.is_valid():
-			viagens_serializer.save()
-			return Response(viagens_serializer.data)
-		return Response(viagens_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-	elif request.method == 'DELETE':
-		viagem.delete()
-		return Response(status=status.HTTP_204_NO_CONTENT)
 
-# Create your views here.
-@api_view(['GET', 'POST'])
-def funcionarios_list(request):
-	if request.method == 'GET':
-		funcionarios = Funcionario.objects.all()
-		funcionarios_serializer = FuncionarioSerializer(funcionarios, many=True)
-		return Response(funcionarios_serializer.data)
 
-	elif request.method == 'POST':
-		funcionarios_serializer = FuncionarioSerializer(data=request.data)
-		if funcionarios_serializer.is_valid():
-			funcionarios_serializer.save()
-			return Response(funcionarios_serializer.data, status=status.HTTP_201_CREATED)
-			return Response(funcionarios_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class funcionarios_detail(generics.RetrieveUpdateDestroyAPIView):
 
-@api_view(['GET', 'POST'])
-def funcoes_list(request):
-	if request.method == 'GET':
-		funcoes = Funcao.objects.all()
-		funcoes_serializer = FuncaoSerializer(funcoes, many=True)
-		return Response(funcoes_serializer.data)
+  queryset = Funcionario.objects.all()
+  serializer_class = FuncionarioSerializer
+  name = 'funcionario-list'
+  permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-	elif request.method == 'POST':
-		funcoes_serializer = FuncaoSerializer(data=request.data)
-		if funcoes_serializer.is_valid():
-			funcoes_serializer.save()
-			return Response(funcoes_serializer.data, status=status.HTTP_201_CREATED)
-			return Response(funcoes_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'POST'])
-def rotas_list(request):
-	if request.method == 'GET':
-		rotas = Rota.objects.all()
-		rotas_serializer = RotaSerializer(rotas, many=True)
-		return Response(rotas_serializer.data)
+class funcoes_list(generics.ListCreateAPIView):
+ 
+  queryset = Funcao.objects.all()
+  serializer_class = FuncaoSerializer
+  name = 'funcao-list'
+  permission_classes = (permissions.IsAuthenticated,)
 
-	elif request.method == 'POST':
-		rotas_serializer = RotaSerializer(data=request.data)
-		if rotas_serializer.is_valid():
-			rotas_serializer.save()
-			return Response(rotas_serializer.data, status=status.HTTP_201_CREATED)
-			return Response(rotas_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class funcionarios_list(generics.ListCreateAPIView):
+  
+  queryset = Funcionario.objects.all()
+  serializer_class = FuncionarioSerializer
+  name = 'funcionario-list'
+  permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+  filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
+  ordering_fields = ('nome',)
+  search_fields = ('nome',)
+  filter_fields = ('nome',)
 
-@api_view(['GET', 'POST'])
-def onibus_list(request):
-	if request.method == 'GET':
-		onibus = Onibus.objects.all()
-		onibus_serializer = OnibusSerializer(onibus, many=True)
-		return Response(onibus_serializer.data)
 
-	elif request.method == 'POST':
-		onibus_serializer = OnibusSerializer(data=request.data)
-		if onibus_serializer.is_valid():
-			onibus_serializer.save()
-			return Response(onibus_serializer.data, status=status.HTTP_201_CREATED)
-			return Response(onibus_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class rotas_list(generics.ListCreateAPIView):
 
-@api_view(['GET', 'POST'])
-def garagens_list(request):
-	if request.method == 'GET':
-		garagens = Garagem.objects.all()
-		garagens_serializer = GaragemSerializer(garagens, many=True)
-		return Response(garagens_serializer.data)
+  queryset = Rota.objects.all()
+  serializer_class = RotaSerializer
+  name = 'rota-list'
+  permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+  filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
+  ordering_fields = ('nomeRota',)
+  search_fields = ('nomeRota',)
+  filter_fields = ('nomeRota',)
 
-	elif request.method == 'POST':
-		garagens_serializer = GaragemSerializer(data=request.data)
-		if garagens_serializer.is_valid():
-			garagens_serializer.save()
-			return Response(garagens_serializer.data, status=status.HTTP_201_CREATED)
-			return Response(garagens_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class onibus_list(generics.ListCreateAPIView):
+
+  queryset = Onibus.objects.all()
+  serializer_class = OnibusSerializer
+  name = 'onibus-list'
+  permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+
+class garagens_list(generics.ListCreateAPIView):
+
+  queryset = Garagem.objects.all()
+  serializer_class = GaragemSerializer
+  name = 'garagem-list'
+  permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+  
+  
+
+class viagens_list(generics.ListCreateAPIView):
+
+  queryset = Viagem.objects.all()
+  serializer_class = ViagemSerializer
+  name = 'viagens-list'
+  http_method_names = ['get', 'delete', 'head', 'options']
+  permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsSaleOnwerOrReadOnly,)
+  
+  def create(self, request):
+    serializer = ViagemSerializer(data=request.data, context={'request': request})
+    if serializer.is_valid():
+      if request.user != serializer.validated_data.get('idFuncionario').funcionario.user:
+        content = {
+          "detail": "Não autorizado"
+        }
+        return Response(content, status=status.HTTP_403_FORBIDDEN)
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserList(generics.ListAPIView):
-  """
-  get: Return a list of all the existing users.
-  """
+
   queryset = User.objects.all()
   serializer_class = UserSerializer
   name = 'user-list'
   permission_classes = (permissions.IsAuthenticated,)
+
+
+class APIRoot(generics.GenericAPIView):
+
+  def get(self, request):
+    return Response({'viagens': reverse(viagens_list.name, request=request),
+                     'funcionarios': reverse(funcionarios_list.name, request=request),
+                     'funcoes': reverse(funcoes_list.name, request=request),
+                     'rotas': reverse(rotas_list.name, request=request),
+                     'onibus': reverse(onibus_list.name, request=request),
+                     'garagens': reverse(garagens_list.name, request=request),
+                     'swagger': reverse('swagger', request=request)
+                     })
+
+
