@@ -19,6 +19,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 from empresa import views
 from django.conf.urls.static import static
+from .views import *
 
 
 router = routers.DefaultRouter()
@@ -29,11 +30,12 @@ router = routers.DefaultRouter()
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^viagens$', views.viagens_list),
-    url(r'^viagens$/(?P<pk>[0-9]+)/$', views.viagens_detail),
+    url(r'^viagem$/(?P<pk>[0-9]+)/$', views.viagens_detail),
     url(r'^funcionarios$', views.funcionarios_list),
     url(r'^funcoes$', views.funcoes_list),
     url(r'^rotas$', views.rotas_list),
     url(r'^onibus$', views.onibus_list),
+    url(r'^users/$', UserList.as_view(), name=UserList.name),
     url(r'^garagens$', views.garagens_list),
  ]
     #url(r'^apiauth/', include('rest_framework.urls', namespace='rest_framework'))

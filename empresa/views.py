@@ -1,4 +1,12 @@
 #from django.contrib.auth.models import User, Group
+from django.urls import reverse
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+from django.utils import timezone
+from .permissions import *
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, status
 from rest_framework import viewsets
 from rest_framework.parsers import JSONParser
 from rest_framework import status
@@ -49,7 +57,7 @@ def viagens_detail(request, pk):
 			return Response(viagens_serializer.data)
 		return Response(viagens_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 	elif request.method == 'DELETE':
-		game.delete()
+		viagem.delete()
 		return Response(status=status.HTTP_204_NO_CONTENT)
 
 # Create your views here.
@@ -122,3 +130,12 @@ def garagens_list(request):
 			garagens_serializer.save()
 			return Response(garagens_serializer.data, status=status.HTTP_201_CREATED)
 			return Response(garagens_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserList(generics.ListAPIView):
+  """
+  get: Return a list of all the existing users.
+  """
+  queryset = User.objects.all()
+  serializer_class = UserSerializer
+  name = 'user-list'
+  permission_classes = (permissions.IsAuthenticated,)
