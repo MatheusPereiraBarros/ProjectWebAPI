@@ -1,5 +1,17 @@
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
 from django.db import models
 from django.utils import timezone
+
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
 
 class Garagem(models.Model):
 	idGaragem = models.AutoField(primary_key=True)
@@ -76,6 +88,7 @@ class Funcao(models.Model):
 class Funcionario(models.Model):
 	idFuncionario = models.AutoField(primary_key=True)
 	nome = models.CharField(max_length=255)
+	user = models.OneToOneField(User, related_name='user')
 	CPF = models.IntegerField()
 	idFuncao = models.ForeignKey(Funcao, on_delete=models.CASCADE, related_name = 'funcao')
 
