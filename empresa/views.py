@@ -55,7 +55,7 @@ class funcionarios_detail(generics.RetrieveUpdateDestroyAPIView):
 
   queryset = Funcionario.objects.all()
   serializer_class = FuncionarioSerializer
-  name = 'funcionario-list'
+  name = 'funcionario-detail'
   permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
