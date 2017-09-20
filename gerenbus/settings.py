@@ -87,18 +87,35 @@ DATABASES = {
 }
 
 REST_FRAMEWORK ={
+
+        'DEFAULT_PAGINATION_CLASS':
+            'rest_framework.pagination.LimitOffsetPagination',
+            'PAGE_SIZE': 5,
+        
         'DEFAULT_AUTHENTICATION_CLASSES': (
                'rest_framework.authentication.BasicAuthentication',  # enables simple command line authentication
                'rest_framework.authentication.SessionAuthentication',
-               'rest_framework.authentication.TokenAuthentication',
            ),
 
         'DEFAULT_PERMISSION_CLASSES':[
        #     'rest_framework.permissions.IsAdminUser',
             'rest_framework.permissions.IsAuthenticated',
             ],
-        'PAGE_SIZE': 10
+        'PAGE_SIZE': 10,
+        
+        'DEFAULT_THROTTLE_CLASSES': (
+            'rest_framework.throttling.AnonRateThrottle',
+            'rest_framework.throttling.UserRateThrottle',
+            ),
+
+        'DEFAULT_THROTTLE_RATES': {
+            'anon': '30/hour',
+            'user': '150/hour',
+            },
+    
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
