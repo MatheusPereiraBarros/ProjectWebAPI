@@ -19,7 +19,7 @@ class viagens_detail(generics.RetrieveUpdateDestroyAPIView):
   queryset = Viagem.objects.all()
   serializer_class = ViagemSerializer
   name = 'viagem-detail'
-  permission_classes = (permissions.IsAuthenticated,)
+  permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 class onibus_detail(generics.RetrieveUpdateDestroyAPIView):
  
@@ -64,7 +64,7 @@ class funcoes_list(generics.ListCreateAPIView):
   queryset = Funcao.objects.all()
   serializer_class = FuncaoSerializer
   name = 'funcao-list'
-  permission_classes = (permissions.IsAuthenticated,)
+  permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 class funcionarios_list(generics.ListCreateAPIView):
   
@@ -78,7 +78,7 @@ class funcionarios_list(generics.ListCreateAPIView):
   filter_fields = ('nome',)
 
 
-class rotas_list(generics.ListCreateAPIView):
+class rotas_list(generics.ListAPIView):
 
   queryset = Rota.objects.all()
   serializer_class = RotaSerializer
